@@ -11,7 +11,7 @@ import (
 )
 
 // base difficulty
-const Difficulty = 16
+const Difficulty = 20
 
 // proof of work instance
 type ProofOfWork struct {
