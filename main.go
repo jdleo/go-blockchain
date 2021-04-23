@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
-	"github.com/jdleo/go-blockchain/blockchain"
+	blockchain "github.com/jdleo/go-blockchain/blockchain"
 )
 
 func main() {
@@ -17,5 +18,11 @@ func main() {
 		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
 		fmt.Printf("Block Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
+
+		// create new pow, and log validation
+		pow := blockchain.NewProof(block)
+		fmt.Printf("PoW: %s\n", strconv.FormatBool(pow.Validate()))
+
+		fmt.Println()
 	}
 }
