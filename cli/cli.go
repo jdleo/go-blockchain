@@ -115,6 +115,17 @@ func (cli *CommandLine) Run() {
 	sendAmount := sendCmd.Int("amount", 0, "Amount to send")
 
 	switch os.Args[1] {
+	case "createwallet":
+		err := createWalletCmd.Parse(os.Args[2:])
+		if err != nil {
+			log.Panic(err)
+		}
+
+	case "listaddresses":
+		err := listAddressesCmd.Parse(os.Args[2:])
+		if err != nil {
+			log.Panic(err)
+		}
 	case "getbalance":
 		err := getBalanceCmd.Parse(os.Args[2:])
 		if err != nil {
@@ -142,7 +153,7 @@ func (cli *CommandLine) Run() {
 	}
 
 	if listAddressesCmd.Parsed() {
-		cli.createWallet()
+		cli.listAddresses()
 	}
 
 	if getBalanceCmd.Parsed() {
