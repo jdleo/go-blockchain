@@ -3,11 +3,14 @@ package main
 import (
 	"os"
 
-	cli "github.com/jdleo/go-blockchain/cli"
+	wallet "github.com/jdleo/go-blockchain/wallet"
 )
 
 func main() {
 	defer os.Exit(0)
-	cmd := cli.CommandLine{}
-	cmd.Run()
+	// cmd := cli.CommandLine{}
+	// cmd.Run()
+
+	w := wallet.MakeWallet()
+	w.Address()
 }

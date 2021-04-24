@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	blockchain "github.com/jdleo/go-blockchain/blockchain"
+	wallet "github.com/jdleo/go-blockchain/wallet"
 )
 
 type CommandLine struct {
@@ -20,6 +21,8 @@ func (cli *CommandLine) printUsage() {
 	fmt.Println(" printchain - prints all blocks in the chain")
 	fmt.Println(" createblockchain -address ADDRESS - creates a blockchain locally, and genesis block is mined to address")
 	fmt.Println(" send -from FROM -to TO -amount AMOUNT - send AMOUNT from FROM to TO")
+	fmt.Println(" createwallet - Creates a new wallet")
+	fmt.Println(" listaddresses - lists all addresses stored locally in wallets.data")
 }
 
 func (cli *CommandLine) validateArgs() {
@@ -27,6 +30,23 @@ func (cli *CommandLine) validateArgs() {
 		cli.printUsage()
 		runtime.Goexit()
 	}
+}
+
+func (cli *CommandLine) listAddresses() {
+	wallets, _ := wallet.CreateWallets()
+	addresses := wallets.GetAllAddresses()
+
+	for _, address := range addresses {
+		fmt.Println(address)
+	}
+}
+
+func (cli *CommandLine) createWallet() {
+	wallets, _ := wallet.CreateWallets()
+	address := wallets.AddWallet()
+	wallets.SaveFile()
+
+	fmt.Printf("New address is: %s\n", address)
 }
 
 func (cli *CommandLine) printChain() {
@@ -85,6 +105,8 @@ func (cli *CommandLine) Run() {
 	getBalanceCmd := flag.NewFlagSet("getbalance", flag.ExitOnError)
 	sendCmd := flag.NewFlagSet("send", flag.ExitOnError)
 	createBlockChainCmd := flag.NewFlagSet("createblockchain", flag.ExitOnError)
+	createWalletCmd := flag.NewFlagSet("createwallet", flag.ExitOnError)
+	listAddressesCmd := flag.NewFlagSet("listaddresses", flag.ExitOnError)
 
 	getBalanceAddress := getBalanceCmd.String("address", "", "The address to retrieve balance of")
 	createBlockchainAddress := createBlockChainCmd.String("address", "", "The address to mine genesis block to")
@@ -113,6 +135,14 @@ func (cli *CommandLine) Run() {
 		if err != nil {
 			log.Panic(err)
 		}
+	}
+
+	if createWalletCmd.Parsed() {
+		cli.createWallet()
+	}
+
+	if listAddressesCmd.Parsed() {
+		cli.createWallet()
 	}
 
 	if getBalanceCmd.Parsed() {
